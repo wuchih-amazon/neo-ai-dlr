@@ -35,6 +35,7 @@ COPY src/ /workspace/src/
 COPY python/ /workspace/python/
 COPY cmake/ /workspace/cmake/
 COPY 3rdparty/ /workspace/3rdparty/
+COPY tests/ /workspace/tests/
 
 RUN \
     mkdir /workspace/build && cd /workspace/build && \
@@ -56,6 +57,12 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /workspace/python/dist/*.whl /home/model-server/
+
+# add tests
+RUN \ 
+    mkdir -p /home/model-server/tests
+COPY --from=builder /workspace/tests /home/model-server/tests
+
 
 RUN pip3 install --pre --no-cache-dir mxnet-model-server==1.0.5b20190521 \
     && pip3 install --no-cache-dir numpy scipy xlrd Pillow boto3 six requests mxnet tensorflow \
