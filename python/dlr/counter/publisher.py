@@ -50,11 +50,13 @@ class MsgPublisher(object):
         logging.info("ccm msg publisher execution stopped")
 
     def stop(self):
+        print("in stop msg_publisher")
         while not self.record_queue.empty():
             print("cant stop, self.record_queue is not empty")
             pass
+        print("finish in stop msg_publisher")
         MsgPublisher._stop_processing = True
-        self._executor.shutdown()
+        self._executor.shutdown(wait=False)
 
     def __del__(self):
         self.stop()

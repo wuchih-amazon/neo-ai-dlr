@@ -141,8 +141,10 @@ class CallCounterMgr(object):
     def stop(self):
         print("stop thread")
         if self.msg_publisher:
+            print("stop msg_publisher")
             self.msg_publisher.stop()
         if self.model_metric:
+            print("stop model_metric")
             self.model_metric.stop()
 
     def __del__(self):

@@ -1,7 +1,7 @@
-from .counter_mgr import call_home
+# from .counter_mgr import call_home
 
 # call home feature starts
-@call_home
+# @call_home
 def init_call_home():
     pass
 

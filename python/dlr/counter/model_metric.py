@@ -61,13 +61,17 @@ class ModelMetric(object):
                 ModelMetric.resp_cnt += 1
 
     def stop(self):
+        print("in stop model_metric")
         ModelMetric._pub_model_metric = False
         mod_dict = ModelExecCounter.get_model_counts_dict()
-        if mod_dict:
-            for key, val in mod_dict.items():
-                self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
+        # if mod_dict:
+        #     print("in mod_dict", mod_dict)
+        #     for key, val in mod_dict.items():
+        #         print("looping: ", key, val)
+        #         self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
+        print("finish in stop model_metric")
         ModelExecCounter.clear_model_counts()
-        self.executor.shutdown()
+        self.executor.shutdown(wait=False)
 
     def __del__(self):
         self.stop()
