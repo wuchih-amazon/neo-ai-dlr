@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import time
 
 from test_utils import get_arch, get_models
 
@@ -36,7 +37,6 @@ def test_notification(capsys):
     # mirror load_and_run_tvm_model.py for integration test
     # load the model
     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resnet18_v1')
-    classes = 1000
     device = 'cpu'
     model = DLRModel(model_path, device)
 
@@ -48,3 +48,28 @@ def test_notification(capsys):
     probabilities = model.run(input_data)  # need to be a list of input arrays matching input names
 
     assert probabilities[0].argmax() == 151
+
+
+def test_long_notification():
+    # setup
+    setup_mock_dlr()
+
+    # import like this so won't implicate other tests
+    from dlr import DLRModel
+
+    # mirror load_and_run_tvm_model.py for integration test
+    # load the model
+    model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resnet18_v1')
+    device = 'cpu'
+    model = DLRModel(model_path, device)
+
+    # run the model
+    image = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dog.npy')).astype(np.float32)
+
+    # do this 10 times and wait for logs
+    for i in range(0, 10):
+        input_data = {'data': image}
+        print('Testing inference on resnet18...')
+        probabilities = model.run(input_data)  # need to be a list of input arrays matching input names
+        assert probabilities[0].argmax() == 151
+        time.sleep(10)
