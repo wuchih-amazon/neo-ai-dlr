@@ -1,8 +1,18 @@
 import numpy as np
 import os
 import time
+import threading
 
 from test_utils import get_arch, get_models
+
+
+def check_thread():
+    all_child_threads = [thread for thread in threading.enumerate() if thread != threading.main_thread()]
+    for thread in all_child_threads:
+        print(thread.getName())
+        print(thread.is_alive())
+        print(thread.__dict__)
+        print(thread.isDaemon())
 
 
 def setup_mock_dlr(model_names):

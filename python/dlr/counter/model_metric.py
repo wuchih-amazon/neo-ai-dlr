@@ -8,11 +8,13 @@ from . import config
 from .model_exec_counter import ModelExecCounter
 from .utils.helper import *
 
+
 class ModelMetric(object):
     _pub_model_metric = True
     _instance = None
     MODEL_RUN = 3
     resp_cnt = 0
+    _executor = None
 
     @staticmethod
     def get_instance(uuid):
@@ -26,8 +28,9 @@ class ModelMetric(object):
             self.client = resturlutils.RestUrlUtils()
             self.uuid = uuid
             # start loop
-            executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS)
-            executor.submit(self.push_model_metric)
+            self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
+                                                                  thread_name_prefix='model_metric')
+            self.executor.submit(self.push_model_metric)
             logging.info("model metric thread pool execution started")
         except Exception as e:
             logging.exception("model metric thread pool not started", exc_info=True)
@@ -45,7 +48,7 @@ class ModelMetric(object):
             _md5model = get_hash_string(model.encode())
             _md5model = str(_md5model.hexdigest())
             pub_data = {'record_type': model_event_type, 'model': _md5model, 'uuid': self.uuid, 'run_count': count}
-            time.sleep(config.CALL_HOME_MODEL_RUN_COUNT_TIME_SECS)
+            # time.sleep(config.CALL_HOME_MODEL_RUN_COUNT_TIME_SECS)
             self.push(pub_data)
         except Exception as e:
             logging.exception("unable to complete model count", exc_info=True)
@@ -56,7 +59,6 @@ class ModelMetric(object):
             resp_code = self.client.send(json.dumps(data))
             if resp_code != 200:
                 ModelMetric.resp_cnt += 1
-        
 
     def stop(self):
         ModelMetric._pub_model_metric = False
@@ -65,6 +67,7 @@ class ModelMetric(object):
             for key, val in mod_dict.items():
                 self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
         ModelExecCounter.clear_model_counts()
+        self.executor.shutdown()
 
     def __del__(self):
         self.stop()

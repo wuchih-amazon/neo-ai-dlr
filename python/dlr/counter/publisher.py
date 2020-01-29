@@ -12,6 +12,8 @@ class MsgPublisher(object):
     _stop_processing = False
     _instance = None
 
+    _executor = None
+
     @staticmethod
     def get_instance():
         """return single instance of class"""
@@ -25,8 +27,9 @@ class MsgPublisher(object):
             self.record_queue = queue.Queue(maxsize=config.CALL_HOME_PUBLISH_MESSAGE_MAX_QUEUE_SIZE)
             self.event = threading.Event()
             # start loop
-            executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS)
-            executor.submit(self._process_queue)
+            self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
+                                                                   thread_name_prefix='publisher')
+            self._executor.submit(self._process_queue)
             logging.info("msg publisher thread pool execution started")
         except Exception as e:
             logging.exception("msg publisher thread pool not started", exc_info=True)
@@ -42,13 +45,16 @@ class MsgPublisher(object):
 
     def _process_queue(self):
         while self.event.wait() and not MsgPublisher._stop_processing:
+            print("cant stop, process_queue")
             self.client.send(self.record_queue.get(block=True))
         logging.info("ccm msg publisher execution stopped")
 
     def stop(self):
         while not self.record_queue.empty():
+            print("cant stop, self.record_queue is not empty")
             pass
         MsgPublisher._stop_processing = True
+        self._executor.shutdown()
 
     def __del__(self):
         self.stop()

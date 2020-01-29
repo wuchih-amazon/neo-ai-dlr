@@ -139,6 +139,7 @@ class CallCounterMgr(object):
             self.msg_publisher.send(json.dumps(data))
 
     def stop(self):
+        print("stop thread")
         if self.msg_publisher:
             self.msg_publisher.stop()
         if self.model_metric:
