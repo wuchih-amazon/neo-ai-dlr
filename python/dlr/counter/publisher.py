@@ -46,7 +46,7 @@ class MsgPublisher(object):
     def _process_queue(self):
         while self.event.wait() and not MsgPublisher._stop_processing:
             print("cant stop, process_queue")
-            self.client.send(self.record_queue.get(block=True))
+            self.client.send(self.record_queue.get(block=True, timeout=5))
         logging.info("ccm msg publisher execution stopped")
 
     def stop(self):
@@ -57,7 +57,7 @@ class MsgPublisher(object):
         MsgPublisher._stop_processing = True
 
         self.executor.shutdown(wait=False)
-        for f in concurrent.futures.as_completed([self.future]):
+        for f in concurrent.futures.as_completed([self.future], 5):
             print("future", str(f))
             print("future done?", f.done())
             print("future cancnel?", f.cancel())
