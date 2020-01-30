@@ -71,6 +71,7 @@ class ModelMetric(object):
         #         print("looping: ", key, val)
         #         self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
         ModelExecCounter.clear_model_counts()
+
         self.executor.shutdown(wait=False)
         self.future.cancel()
 

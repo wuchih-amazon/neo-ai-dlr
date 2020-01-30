@@ -47,6 +47,7 @@ class MsgPublisher(object):
         while self.event.wait() and not MsgPublisher._stop_processing:
             print("cant stop, process_queue")
             self.client.send(self.record_queue.get(block=True, timeout=5))
+        print("queue has stopped")
         logging.info("ccm msg publisher execution stopped")
 
     def stop(self):
