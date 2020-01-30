@@ -15,6 +15,7 @@ class ModelMetric(object):
     MODEL_RUN = 3
     resp_cnt = 0
     executor = None
+    fs = None
 
     @staticmethod
     def get_instance(uuid):
@@ -30,7 +31,7 @@ class ModelMetric(object):
             # start loop
             self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
                                                                   thread_name_prefix='model_metric')
-            self.executor.submit(self.push_model_metric)
+            self.future = self.executor.submit(self.push_model_metric)
             logging.info("model metric thread pool execution started")
         except Exception as e:
             logging.exception("model metric thread pool not started", exc_info=True)
@@ -71,6 +72,12 @@ class ModelMetric(object):
         #         self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
         ModelExecCounter.clear_model_counts()
         self.executor.shutdown(wait=False)
+
+        for f in concurrent.futures.as_completed([self.future]):
+            print("future", str(f))
+            print("future done?", f.done())
+            print("future cancnel?", f.cancel())
+
         print("finish in stop model_metric")
 
     def __del__(self):

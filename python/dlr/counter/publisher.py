@@ -29,7 +29,7 @@ class MsgPublisher(object):
             # start loop
             self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
                                                                   thread_name_prefix='publisher')
-            self.executor.submit(self._process_queue)
+            self.future = self.executor.submit(self._process_queue)
             logging.info("msg publisher thread pool execution started")
         except Exception as e:
             logging.exception("msg publisher thread pool not started", exc_info=True)
@@ -55,7 +55,12 @@ class MsgPublisher(object):
             print("cant stop, self.record_queue is not empty")
             pass
         MsgPublisher._stop_processing = True
+
         self.executor.shutdown(wait=False)
+        for f in concurrent.futures.as_completed([self.future]):
+            print("future", str(f))
+            print("future done?", f.done())
+            print("future cancnel?", f.cancel())
 
         print("finish in stop msg_publisher")
 
