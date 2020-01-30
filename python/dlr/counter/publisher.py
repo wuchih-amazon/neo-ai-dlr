@@ -12,7 +12,7 @@ class MsgPublisher(object):
     _stop_processing = False
     _instance = None
 
-    _executor = None
+    executor = None
 
     @staticmethod
     def get_instance():
@@ -27,9 +27,9 @@ class MsgPublisher(object):
             self.record_queue = queue.Queue(maxsize=config.CALL_HOME_PUBLISH_MESSAGE_MAX_QUEUE_SIZE)
             self.event = threading.Event()
             # start loop
-            self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
-                                                                   thread_name_prefix='publisher')
-            self._executor.submit(self._process_queue)
+            self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=config.CALL_HOME_MAX_WORKERS_THREADS,
+                                                                  thread_name_prefix='publisher')
+            self.executor.submit(self._process_queue)
             logging.info("msg publisher thread pool execution started")
         except Exception as e:
             logging.exception("msg publisher thread pool not started", exc_info=True)
@@ -54,9 +54,9 @@ class MsgPublisher(object):
         while not self.record_queue.empty():
             print("cant stop, self.record_queue is not empty")
             pass
-        print("finish in stop msg_publisher")
         MsgPublisher._stop_processing = True
-        self._executor.shutdown(wait=False)
+        self.executor.shutdown(wait=False)
+        print("finish in stop msg_publisher")
 
     def __del__(self):
         self.stop()

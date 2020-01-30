@@ -14,7 +14,7 @@ class ModelMetric(object):
     _instance = None
     MODEL_RUN = 3
     resp_cnt = 0
-    _executor = None
+    executor = None
 
     @staticmethod
     def get_instance(uuid):
@@ -69,9 +69,9 @@ class ModelMetric(object):
         #     for key, val in mod_dict.items():
         #         print("looping: ", key, val)
         #         self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
-        print("finish in stop model_metric")
         ModelExecCounter.clear_model_counts()
         self.executor.shutdown(wait=False)
+        print("finish in stop model_metric")
 
     def __del__(self):
         self.stop()

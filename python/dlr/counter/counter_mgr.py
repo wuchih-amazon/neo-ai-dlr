@@ -11,6 +11,7 @@ from .model_exec_counter import ModelExecCounter
 from .model_metric import ModelMetric
 from .utils.helper import *
 
+
 def call_home(func):
     def wrapped_call_home(*args, **kwargs):
         call_counter = CallCounterMgr.get_instance()
@@ -67,7 +68,7 @@ class CallCounterMgr(object):
     @staticmethod
     def is_feature_enabled():
         """check feature disabled config. ccm_config.json file present in root folder"""
-        feature_enb = CallCounterMgr.DEFAULT_ENABLE_FEATURE 
+        feature_enb = CallCounterMgr.DEFAULT_ENABLE_FEATURE
         try:
             if os.path.isfile(config.CALL_HOME_USER_CONFIG_FILE):
                 with open(config.CALL_HOME_USER_CONFIG_FILE, "r") as ccm_json_file:
@@ -80,7 +81,7 @@ class CallCounterMgr(object):
                 feature_enb = True
         except Exception as e:
             logging.exception("while in reading ccm config file")
-        return feature_enb 
+        return feature_enb
 
     def is_device_info_published(self):
         """check if device information send only single time in DLR installation life time.
@@ -146,6 +147,7 @@ class CallCounterMgr(object):
         if self.model_metric:
             print("stop model_metric")
             self.model_metric.stop()
+        print("stop thread done")
 
     def __del__(self):
         self.stop()
