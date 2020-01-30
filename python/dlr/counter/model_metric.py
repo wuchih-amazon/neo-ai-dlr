@@ -72,11 +72,7 @@ class ModelMetric(object):
         #         self.model_run_info_publish(ModelMetric.MODEL_RUN, key, val)
         ModelExecCounter.clear_model_counts()
         self.executor.shutdown(wait=False)
-
-        for f in concurrent.futures.as_completed([self.future], 5):
-            print("future", str(f))
-            print("future done?", f.done())
-            print("future cancnel?", f.cancel())
+        self.future.cancel()
 
         print("finish in stop model_metric")
 

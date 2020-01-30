@@ -57,10 +57,7 @@ class MsgPublisher(object):
         MsgPublisher._stop_processing = True
 
         self.executor.shutdown(wait=False)
-        for f in concurrent.futures.as_completed([self.future], 5):
-            print("future", str(f))
-            print("future done?", f.done())
-            print("future cancnel?", f.cancel())
+        self.future.cancel()
 
         print("finish in stop msg_publisher")
 
