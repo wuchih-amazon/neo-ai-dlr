@@ -10,6 +10,7 @@ from . import config
 from .model_exec_counter import ModelExecCounter
 from .model_metric import ModelMetric
 from .utils.helper import *
+import concurrent.futures
 
 
 def call_home(func):
@@ -147,6 +148,7 @@ class CallCounterMgr(object):
         if self.model_metric:
             print("stop model_metric")
             self.model_metric.stop()
+
         print("stop thread done")
 
     def __del__(self):

@@ -56,6 +56,7 @@ class MsgPublisher(object):
             pass
         MsgPublisher._stop_processing = True
         self.executor.shutdown(wait=False)
+
         print("finish in stop msg_publisher")
 
     def __del__(self):
