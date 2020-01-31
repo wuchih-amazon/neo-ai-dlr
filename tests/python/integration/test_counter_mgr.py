@@ -38,6 +38,7 @@ def test_notification(capsys):
     model_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resnet18_v1')
     classes = 1000
     device = 'cpu'
+    print("Target argument", model_path, device)
     model = DLRModel(model_path, device)
 
     # run the model
