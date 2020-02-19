@@ -7,9 +7,11 @@ from .api import IDLRModel
 
 from .libpath import find_lib_path
 
+
 class DLRError(Exception):
     """Error thrown by DLR"""
     pass
+
 
 def _check_call(ret):
     """
@@ -24,6 +26,7 @@ def _check_call(ret):
     """
     if ret != 0:
         raise DLRError(_LIB.DLRGetLastError().decode('ascii'))
+
 
 def _load_lib():
     """Load DLR library."""
@@ -60,8 +63,10 @@ def _load_lib():
     lib.DLRGetLastError.restype = ctypes.c_char_p
     return lib
 
+
 # load the DLR library globally
 _LIB = _load_lib()
+
 
 class DLRModelImpl(IDLRModel):
     """
@@ -93,7 +98,11 @@ class DLRModelImpl(IDLRModel):
     def _get_version(self):
         version = c_char_p()
         _check_call(_LIB.GetDLRVersion(byref(version)))
-        return version.value.decode('ascii')
+        try:
+            v = version.value.decode('ascii')
+            return v
+        except:
+            return ''
 
     def __init__(self, model_path, dev_type='cpu', dev_id=0):
         if not os.path.exists(model_path):
@@ -117,7 +126,7 @@ class DLRModelImpl(IDLRModel):
         self.num_weights = self._get_num_weights()
         self.input_names = []
         self.weight_names = []
-        self.input_shapes = {}   # Remember shape used in _set_input()
+        self.input_shapes = {}  # Remember shape used in _set_input()
         for i in range(self.num_inputs):
             self.input_names.append(self._get_input_name(i))
         for i in range(self.num_weights):
@@ -239,7 +248,7 @@ class DLRModelImpl(IDLRModel):
         size = ctypes.c_longlong()
         dim = ctypes.c_int()
         _check_call(_LIB.GetDLROutputSizeDim(byref(self.handle), idx,
-                                                      byref(size), byref(dim)))
+                                             byref(size), byref(dim)))
         return size.value, dim.value
 
     def _get_output_shape(self, index):
@@ -261,8 +270,8 @@ class DLRModelImpl(IDLRModel):
         self.output_size_dim[index] = (size, dim)
         shape = np.zeros(dim, dtype=np.int64)
         _check_call(_LIB.GetDLROutputShape(byref(self.handle),
-                                                    c_int(index),
-                    shape.ctypes.data_as(ctypes.POINTER(ctypes.c_longlong))))
+                                           c_int(index),
+                                           shape.ctypes.data_as(ctypes.POINTER(ctypes.c_longlong))))
         return shape
 
     def _get_output(self, index):
@@ -284,7 +293,7 @@ class DLRModelImpl(IDLRModel):
 
         output = np.zeros(self.output_size_dim[index][0], dtype=np.float32)
         _check_call(_LIB.GetDLROutput(byref(self.handle), c_int(index),
-                    output.ctypes.data_as(ctypes.POINTER(ctypes.c_float))))
+                                      output.ctypes.data_as(ctypes.POINTER(ctypes.c_float))))
         out = output.reshape(self.output_shapes[index])
         return out
 
@@ -320,7 +329,7 @@ class DLRModelImpl(IDLRModel):
             # TVM model
             for key, value in input_values.items():
                 if (self.input_names and key not in self.input_names) and \
-                   (self.weight_names and key not in self.weight_names):
+                        (self.weight_names and key not in self.weight_names):
                     raise ValueError("%s is not a valid input name." % key)
                 self._set_input(key, value)
         else:
