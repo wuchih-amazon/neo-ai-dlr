@@ -4,6 +4,7 @@ import numpy as np
 import os
 from test_utils import get_arch, get_models
 import time
+import cProfile
 
 
 def sample_data():
@@ -37,6 +38,8 @@ def load_test():
 
         assert probabilities[0].argmax() == 151
 
+    cProfile.run('model.run(input_data)')
+
     results = np.array(results)
     print(results.min(), results.mean(), results.max())
 
@@ -46,7 +49,7 @@ def set_up():
     model_names = ['resnet18_v1', '4in2out', 'assign_op']
     for model_name in model_names:
         get_models(model_name, arch, kind='tvm')
-    
+
 
 load_test()
 print("test done")
