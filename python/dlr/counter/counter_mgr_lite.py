@@ -11,9 +11,11 @@ def call_home_lite(func):
             mgr.add_runtime_loaded()
 
         if func.__name__ == '__init__':
-            mgr.add_model_loaded()
+            model = args[0]
+            mgr.add_model_loaded(model)
         elif func.__name__ == 'run':
-            mgr.add_model_run()
+            obj = args[0]
+            mgr.add_model_run(obj.get_model_name())
 
         return func(*args, **kwargs)
 
