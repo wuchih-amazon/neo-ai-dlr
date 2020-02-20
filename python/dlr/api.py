@@ -96,7 +96,7 @@ class DLRModel(IDLRModel):
             self.neo_logger.exception("error in DLRModel instantiation {}".format(ex))
             raise ex
 
-    @call_home
+    @call_home_lite
     def run(self, input_values):
         try:
             return self._impl.run(input_values)

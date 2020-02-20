@@ -3,9 +3,21 @@ from .utils.helper import get_hash_string
 
 def call_home_lite(func):
     def wrapper(*args, **kwargs):
+
+        has_instance = CounterMgrLite.has_instance()
+        mgr = CounterMgrLite.get_instances()
+        if not has_instance:
+            print('disclaimer')
+            mgr.add_runtime_loaded()
+
+        if func.__name__ == '__init__':
+            mgr.add_model_loaded()
+        elif func.__name__ == 'run':
+            mgr.add_model_run()
+
         return func(*args, **kwargs)
 
-    return wrapper()
+    return wrapper
 
 
 class CounterMgrLite:
@@ -17,8 +29,13 @@ class CounterMgrLite:
     metrics = {}
 
     @staticmethod
+    def has_instance():
+        return CounterMgrLite._instance is not None
+
+    @staticmethod
     def get_instances():
         CounterMgrLite._instance = CounterMgrLite()
+        return CounterMgrLite._instance
 
     def __init__(self):
         self.msgs = []
