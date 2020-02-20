@@ -10,14 +10,15 @@ def call_home_lite(func):
             print('disclaimer')
             mgr.add_runtime_loaded()
 
+        resp = func(*args, **kwargs)
         if func.__name__ == '__init__':
             model = args[0]
-            mgr.add_model_loaded(model)
+            mgr.add_model_loaded(model.get_model_name())
         elif func.__name__ == 'run':
-            obj = args[0]
-            mgr.add_model_run(obj.get_model_name())
+            model = args[0]
+            mgr.add_model_run(model.get_model_name())
 
-        return func(*args, **kwargs)
+        return resp
 
     return wrapper
 
