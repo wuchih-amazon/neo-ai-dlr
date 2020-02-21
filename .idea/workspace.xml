@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="b3a0c062-7598-4df4-bd26-67b3a6145840" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/python/dlr/counter/counter_mgr_lite.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/dlr/counter/counter_mgr_lite.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XlgKgsqOxrcVt2YLyBBloDidv8" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/python/integration" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b3a0c062-7598-4df4-bd26-67b3a6145840" name="Default Changelist" comment="" />
+      <created>1581626032257</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581626032257</updated>
+      <workItem from="1581626034537" duration="3914000" />
+      <workItem from="1581704095103" duration="4818000" />
+      <workItem from="1581725461231" duration="948000" />
+      <workItem from="1582053566949" duration="3295000" />
+      <workItem from="1582063052225" duration="13640000" />
+      <workItem from="1582157703380" duration="2018000" />
+      <workItem from="1582162955350" duration="14625000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="613" y="454" width="540" height="533" key="StructurePopup" timestamp="1582245303550">
+      <screen x="0" y="0" width="3440" height="1440" />
+    </state>
+    <state x="613" y="454" width="540" height="533" key="StructurePopup/0.0.3440.1440@0.0.3440.1440" timestamp="1582245303550" />
+    <state x="613" y="470" width="540" height="524" key="StructurePopup/0.23.3440.1417@0.23.3440.1417" timestamp="1582060264052" />
+    <state x="263" y="123" width="1240" height="1217" key="VCS.FileHistoryDialog" timestamp="1582065347743">
+      <screen x="0" y="23" width="3440" height="1417" />
+    </state>
+    <state x="263" y="123" width="1240" height="1217" key="VCS.FileHistoryDialog/0.23.3440.1417@0.23.3440.1417" timestamp="1582065347743" />
+    <state x="963" y="467" width="1594" height="778" key="find.popup" timestamp="1582231933415">
+      <screen x="0" y="0" width="3440" height="1440" />
+    </state>
+    <state x="403" y="292" width="667" height="486" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1582158407101" />
+    <state x="963" y="467" width="1594" height="778" key="find.popup/0.0.3440.1440@0.0.3440.1440" timestamp="1582231933415" />
+    <state x="403" y="307" width="667" height="486" key="find.popup/0.23.1440.877@0.23.1440.877" timestamp="1582070057573" />
+    <state x="963" y="482" width="774" height="486" key="find.popup/0.23.3440.1417@0.23.3440.1417" timestamp="1582142053862" />
+    <state x="1385" y="331" width="670" height="676" key="search.everywhere.popup" timestamp="1582245811052">
+      <screen x="0" y="0" width="3440" height="1440" />
+    </state>
+    <state x="580" y="207" width="670" height="424" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1582158299504" />
+    <state x="1385" y="331" width="670" height="676" key="search.everywhere.popup/0.0.3440.1440@0.0.3440.1440" timestamp="1582245811052" />
+    <state x="580" y="225" width="670" height="413" key="search.everywhere.popup/0.23.1440.877@0.23.1440.877" timestamp="1582070156219" />
+    <state x="1385" y="349" width="670" height="666" key="search.everywhere.popup/0.23.3440.1417@0.23.3440.1417" timestamp="1582151471994" />
+  </component>
+</project>
