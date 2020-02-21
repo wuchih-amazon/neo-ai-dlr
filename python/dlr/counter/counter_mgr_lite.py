@@ -91,14 +91,11 @@ class CounterMgrLite:
 
         while len(self.msgs) != 0:
             m = self.msgs.popleft()
-            print('message: ', m)
             self.client.send(m)
 
     def clean_up(self):
-        print("clean up initiated")
         self.stop_evt.set()
         self.send_msg()
-        print("clean up done")
 
 
 class Worker(Thread):
@@ -110,5 +107,4 @@ class Worker(Thread):
 
     def run(self):
         while not self.stop_evt.wait(5):
-            print("execute thread")
             self.fn()
