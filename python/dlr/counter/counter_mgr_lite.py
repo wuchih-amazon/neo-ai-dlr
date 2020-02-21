@@ -39,7 +39,8 @@ class CounterMgrLite:
 
     @staticmethod
     def get_instances():
-        CounterMgrLite._instance = CounterMgrLite()
+        if not CounterMgrLite._instance:
+            CounterMgrLite._instance = CounterMgrLite()
         return CounterMgrLite._instance
 
     def __init__(self):
