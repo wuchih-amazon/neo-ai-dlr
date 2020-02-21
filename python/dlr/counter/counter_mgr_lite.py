@@ -72,11 +72,12 @@ class CounterMgrLite:
         return name
 
     def create_thread(self):
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            executor.submit(self.send_msg)
+        executor = ThreadPoolExecutor(max_workers=5)
+        executor.submit(self.send_msg)
 
     def send_msg(self):
         while True:
-            for m in self.msgs:
+            while len(self.msgs) != 0:
+                m = self.msgs.pop()
                 self.client.send(m)
-            time.sleep(300)
+            time.sleep(5)
