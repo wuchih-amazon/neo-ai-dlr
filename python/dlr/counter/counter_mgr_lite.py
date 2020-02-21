@@ -1,6 +1,7 @@
 from .utils.helper import get_hash_string
 from .utils import resturlutils
 import time
+import json
 from concurrent.futures import ThreadPoolExecutor
 
 
@@ -51,12 +52,12 @@ class CounterMgrLite:
 
     def add_runtime_loaded(self):
         data = {'record_type': self.RUNTIME_LOAD}
-        self.msgs.append(data)
+        self.msgs.append(json.dumps(data))
 
     def add_model_loaded(self, model: str):
         model_name = self.get_model_hash(model)
         data = {'record_type': self.MODEL_LOAD, 'model': model_name}
-        self.msgs.append(data)
+        self.msgs.append(json.dumps(data))
 
     def add_model_run(self, model: str):
         model_name = self.get_model_hash(model)
@@ -80,4 +81,4 @@ class CounterMgrLite:
             while len(self.msgs) != 0:
                 m = self.msgs.pop()
                 self.client.send(m)
-            time.sleep(5)
+            time.sleep(1)
