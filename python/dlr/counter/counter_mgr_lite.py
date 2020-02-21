@@ -61,8 +61,8 @@ class CounterMgrLite:
 
     def add_model_run(self, model: str):
         model_name = self.get_model_hash(model)
+        print('model_name', model_name, self.metrics)
         if self.metrics.get(model_name) is not None:
-            val = self.metrics[model_name]
             self.metrics[model_name] += 1
         else:
             print('model_name not found', model_name)
@@ -89,4 +89,3 @@ class CounterMgrLite:
                 print(m)
                 self.client.send(m)
             time.sleep(10)
-
