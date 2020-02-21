@@ -33,8 +33,6 @@ class CounterMgrLite:
     MODEL_LOAD = 2
     MODEL_RUN = 3
 
-    metrics = {}
-
     @staticmethod
     def has_instance():
         return CounterMgrLite._instance is not None
@@ -47,6 +45,7 @@ class CounterMgrLite:
     def __init__(self):
         self.msgs = []
         self.client = resturlutils.RestUrlUtils()
+        self.metrics = {}
 
         self.create_thread()
 
