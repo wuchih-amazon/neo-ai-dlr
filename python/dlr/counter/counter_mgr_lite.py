@@ -85,5 +85,6 @@ class CounterMgrLite:
 
             while len(self.msgs) != 0:
                 m = self.msgs.pop()
+                print(m)
                 self.client.send(m)
             time.sleep(1)

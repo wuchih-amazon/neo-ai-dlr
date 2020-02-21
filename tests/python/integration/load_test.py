@@ -23,12 +23,11 @@ def load_test():
     model = DLRModel(model_path, device)
 
     results = []
-    for i in range(0, 10):
+    for i in range(0, 100):
         # Run the model
         image = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'dog.npy')).astype(np.float32)
         # flatten within a input array
         input_data = {'data': image}
-        print("input data", input_data)
         print('Testing inference on resnet18...')
 
         start = time.time()
