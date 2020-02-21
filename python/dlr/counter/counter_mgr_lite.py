@@ -1,12 +1,10 @@
 from .utils.helper import get_hash_string
 from .utils import resturlutils
-import time
 import json
 import atexit
-
-from concurrent.futures import ThreadPoolExecutor
 from .config import CALL_HOME_USR_NOTIFICATION
 from threading import Thread, Event
+from collections import deque
 
 
 def call_home_lite(func):
@@ -49,11 +47,11 @@ class CounterMgrLite:
         return CounterMgrLite._instance
 
     def __init__(self):
-        self.msgs = []
-        self.client = resturlutils.RestUrlUtils()
+        # thread-safe
+        self.msgs = deque([])
         self.metrics = {}
-        self.is_process = False
 
+        self.client = resturlutils.RestUrlUtils()
         self.stop_evt = None
         self.worker = None
 
@@ -70,11 +68,9 @@ class CounterMgrLite:
 
     def add_model_run(self, model: str):
         model_name = self.get_model_hash(model)
-        print('model_name', model_name, self.metrics)
         if self.metrics.get(model_name) is not None:
             self.metrics[model_name] += 1
         else:
-            print('model_name not found', model_name)
             self.metrics[model_name] = 1
 
     def get_model_hash(self, model):
@@ -83,14 +79,9 @@ class CounterMgrLite:
         return name
 
     def create_thread(self):
-        self.is_process = True
-
         self.stop_evt = Event()
         self.worker = Worker(self.send_msg, self.stop_evt)
         self.worker.start()
-
-    def worker(self):
-        self.send_msg()
 
     def send_msg(self):
         for k in list(self.metrics):
@@ -99,14 +90,12 @@ class CounterMgrLite:
         self.metrics.clear()
 
         while len(self.msgs) != 0:
-            m = self.msgs.pop()
+            m = self.msgs.popleft()
             print('message: ', m)
             self.client.send(m)
 
     def clean_up(self):
         print("clean up initiated")
-        # self.executor.shutdown()
-
         self.stop_evt.set()
         self.send_msg()
         print("clean up done")
@@ -115,7 +104,7 @@ class CounterMgrLite:
 class Worker(Thread):
 
     def __init__(self, fn, event: Event):
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
         self.fn = fn
         self.stop_evt = event
 
