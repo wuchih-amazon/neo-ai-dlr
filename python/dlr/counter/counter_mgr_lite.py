@@ -2,7 +2,10 @@ from .utils.helper import get_hash_string
 from .utils import resturlutils
 import time
 import json
+import atexit
+
 from concurrent.futures import ThreadPoolExecutor
+from .config import CALL_HOME_USR_NOTIFICATION
 
 
 def call_home_lite(func):
@@ -11,7 +14,7 @@ def call_home_lite(func):
         has_instance = CounterMgrLite.has_instance()
         mgr = CounterMgrLite.get_instances()
         if not has_instance:
-            print('disclaimer')
+            print(CALL_HOME_USR_NOTIFICATION)
             mgr.add_runtime_loaded()
 
         resp = func(*args, **kwargs)
@@ -41,12 +44,14 @@ class CounterMgrLite:
     def get_instances():
         if not CounterMgrLite._instance:
             CounterMgrLite._instance = CounterMgrLite()
+            atexit.register(CounterMgrLite._instance.clean_up)
         return CounterMgrLite._instance
 
     def __init__(self):
         self.msgs = []
         self.client = resturlutils.RestUrlUtils()
         self.metrics = {}
+        self.is_process = False
 
         self.create_thread()
 
@@ -74,18 +79,29 @@ class CounterMgrLite:
         return name
 
     def create_thread(self):
-        executor = ThreadPoolExecutor(max_workers=5)
-        executor.submit(self.send_msg)
+        self.is_process = True
+        self.executor = ThreadPoolExecutor(max_workers=5)
+        self.executor.submit(self.worker)
+
+    def worker(self):
+        while self.is_process:
+            self.send_msg()
+            time.sleep(5)
 
     def send_msg(self):
-        while True:
-            for k in list(self.metrics):
-                pub_data = {'record_type': self.MODEL_RUN, 'model': k, 'run_count': self.metrics[k]}
-                self.msgs.append(json.dumps(pub_data))
-            self.metrics.clear()
+        for k in list(self.metrics):
+            pub_data = {'record_type': self.MODEL_RUN, 'model': k, 'run_count': self.metrics[k]}
+            self.msgs.append(json.dumps(pub_data))
+        self.metrics.clear()
 
-            while len(self.msgs) != 0:
-                m = self.msgs.pop()
-                print(m)
-                self.client.send(m)
+        while len(self.msgs) != 0:
+            m = self.msgs.pop()
+            print(m)
+            self.client.send(m)
             time.sleep(10)
+
+    def clean_up(self):
+        print("clean up initiated")
+        self.executor.shutdown()
+        self.send_msg()
+        print("clean up done")
