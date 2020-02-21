@@ -38,7 +38,6 @@ def load_test():
 
         assert probabilities[0].argmax() == 151
 
-    cProfile.run('model.run(input_data)')
 
     results = np.array(results)
     print(results.min(), results.mean(), results.max())
@@ -50,6 +49,6 @@ def set_up():
     for model_name in model_names:
         get_models(model_name, arch, kind='tvm')
 
-
-load_test()
+set_up()
+cProfile.run('load_test()')
 print("test done")
