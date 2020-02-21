@@ -83,12 +83,12 @@ class CounterMgrLite:
     def create_thread(self):
         self.is_process = True
         self.timer = threading.Timer(5, self.worker)
-        self.timer.run()
+        self.timer.start()
 
     def worker(self):
         self.send_msg()
         self.timer = threading.Timer(5, self.worker)
-        self.timer.run()
+        self.timer.start()
 
     def send_msg(self):
         for k in list(self.metrics):
