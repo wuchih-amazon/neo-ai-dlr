@@ -47,6 +47,8 @@ class CounterMgrLite:
         self.msgs = []
         self.client = resturlutils.RestUrlUtils()
 
+        self.create_thread()
+
     def add_runtime_loaded(self):
         data = {'record_type': self.RUNTIME_LOAD}
         self.msgs.append(data)
