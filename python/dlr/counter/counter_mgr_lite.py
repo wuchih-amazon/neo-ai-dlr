@@ -61,9 +61,9 @@ class CounterMgrLite:
 
     def add_model_run(self, model: str):
         model_name = self.get_model_hash(model)
-        if model_name in self.metrics:
+        if self.metrics.get(model_name) is not None:
             val = self.metrics[model_name]
-            self.metrics[model_name] = val + 1
+            self.metrics[model_name] += 1
         else:
             self.metrics[model_name] = 1
 
