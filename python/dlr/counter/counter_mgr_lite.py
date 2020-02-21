@@ -2,9 +2,12 @@ from .utils.helper import get_hash_string
 from .utils import resturlutils
 import json
 import atexit
-from .config import CALL_HOME_USR_NOTIFICATION
+from .config import CALL_HOME_USR_NOTIFICATION, CALL_HOME_USER_CONFIG_FILE
 from threading import Thread, Event
 from collections import deque
+
+import logging
+import os
 
 
 def call_home_lite(func):
@@ -31,6 +34,8 @@ def call_home_lite(func):
 
 class CounterMgrLite:
     _instance = None
+    _enable_feature = None
+
     RUNTIME_LOAD = 1
     MODEL_LOAD = 2
     MODEL_RUN = 3
@@ -41,10 +46,33 @@ class CounterMgrLite:
 
     @staticmethod
     def get_instances():
-        if not CounterMgrLite._instance:
+        if not CounterMgrLite._instance and CounterMgrLite.is_feature_enabled():
             CounterMgrLite._instance = CounterMgrLite()
             atexit.register(CounterMgrLite._instance.clean_up)
         return CounterMgrLite._instance
+
+    @staticmethod
+    def is_feature_enabled(self):
+
+        if CounterMgrLite.enable_feature is not None:
+            return CounterMgrLite.enable_feature
+
+        feature_enb = False
+        try:
+            if os.path.isfile(CALL_HOME_USER_CONFIG_FILE):
+                with open(CALL_HOME_USER_CONFIG_FILE, "r") as ccm_json_file:
+                    data = json.load(ccm_json_file)
+                    if 'false' == str(data['ccm']).lower():
+                        feature_enb = False
+                    else:
+                        feature_enb = True
+            else:
+                feature_enb = True
+        except Exception as e:
+            logging.exception("while in reading ccm config file", exc_info=False)
+
+        CounterMgrLite.enable_feature = feature_enb
+        return feature_enb
 
     def __init__(self):
         # thread-safe
@@ -54,6 +82,8 @@ class CounterMgrLite:
         self.client = resturlutils.RestUrlUtils()
         self.stop_evt = None
         self.worker = None
+
+        self.enable_feature = None
 
         self.create_thread()
 
