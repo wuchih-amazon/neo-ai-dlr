@@ -65,6 +65,7 @@ class CounterMgrLite:
             val = self.metrics[model_name]
             self.metrics[model_name] += 1
         else:
+            print('model_name not found', model_name)
             self.metrics[model_name] = 1
 
     def get_model_hash(self, model):
@@ -87,4 +88,5 @@ class CounterMgrLite:
                 m = self.msgs.pop()
                 print(m)
                 self.client.send(m)
-            time.sleep(1)
+            time.sleep(10)
+
