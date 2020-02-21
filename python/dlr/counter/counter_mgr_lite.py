@@ -62,7 +62,7 @@ class CounterMgrLite:
 
     def get_model_hash(self, model):
         hashed = get_hash_string(model.encode())
-        name = str(hashed.hexdigets())
+        name = str(hashed.hexdigest())
         return name
 
     def publish(self):

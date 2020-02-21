@@ -1,0 +1,79 @@
+{
+  "nodes": [
+    {
+      "op": "null", 
+      "name": "w2", 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "w", 
+      "inputs": []
+    }, 
+    {
+      "op": "tvm_op", 
+      "name": "__add_scalar__0", 
+      "attrs": {
+        "flatten_data": "1", 
+        "func_name": "fuse___add_scalar__", 
+        "num_inputs": "1", 
+        "num_outputs": "1"
+      }, 
+      "inputs": [[1, 0, 0]]
+    }, 
+    {
+      "op": "tvm_op", 
+      "name": "_assign0", 
+      "attrs": {
+        "flatten_data": "1", 
+        "func_name": "__nop", 
+        "num_inputs": "2", 
+        "num_outputs": "1"
+      }, 
+      "inputs": [[1, 0, 1], [2, 0, 0]]
+    }, 
+    {
+      "op": "tvm_op", 
+      "name": "__add_scalar__1", 
+      "attrs": {
+        "flatten_data": "0", 
+        "func_name": "fuse___add_scalar___1", 
+        "num_inputs": "1", 
+        "num_outputs": "1"
+      }, 
+      "inputs": [[3, 0, 0]]
+    }, 
+    {
+      "op": "tvm_op", 
+      "name": "_assign1", 
+      "attrs": {
+        "flatten_data": "1", 
+        "func_name": "__nop", 
+        "num_inputs": "2", 
+        "num_outputs": "1"
+      }, 
+      "inputs": [[0, 0, 1], [4, 0, 0]]
+    }
+  ], 
+  "arg_nodes": [0, 1], 
+  "node_row_ptr": [0, 1, 2, 3, 4, 5, 6], 
+  "heads": [[5, 0, 0]], 
+  "attrs": {
+    "storage_id": ["list_int", [2, 3, 3, 3, 2, 2]], 
+    "dltype": ["list_str", [
+        "float32", 
+        "float32", 
+        "float32", 
+        "float32", 
+        "float32", 
+        "float32"]], 
+    "dtype": ["list_int", [0, 0, 0, 0, 0, 0]], 
+    "shape": ["list_shape", [
+        [5, 3, 18, 18], 
+        [5, 3, 18, 18], 
+        [5, 3, 18, 18], 
+        [5, 3, 18, 18], 
+        [5, 3, 18, 18], 
+        [5, 3, 18, 18]]]
+  }
+}
