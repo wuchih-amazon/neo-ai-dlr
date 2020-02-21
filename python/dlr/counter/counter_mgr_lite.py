@@ -115,7 +115,7 @@ class CounterMgrLite:
 class Worker(Thread):
 
     def __init__(self, fn, event: Event):
-        Thread.__init__()
+        Thread.__init__(self)
         self.fn = fn
         self.stop_evt = event
 
