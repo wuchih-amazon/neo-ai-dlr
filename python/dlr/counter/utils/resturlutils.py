@@ -19,9 +19,11 @@ class RestUrlUtils(object):
             logging.info("Response Data:", resp.data)
             logging.info("Response Status:", resp.status)
         except urllib3.exceptions.HTTPError as e:
+            print(e)
             logging.exception("rest api error!", exc_info=False)
             resp_code = -1
         except Exception as e:
+            print(e)
             logging.exception("rest api miscellaneous error", exc_info=False)
             resp_code = -1
         return resp_code
