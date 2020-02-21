@@ -1,4 +1,7 @@
 from .utils.helper import get_hash_string
+from .utils import resturlutils
+import time
+from concurrent.futures import ThreadPoolExecutor
 
 
 def call_home_lite(func):
@@ -42,6 +45,7 @@ class CounterMgrLite:
 
     def __init__(self):
         self.msgs = []
+        self.client = resturlutils.RestUrlUtils()
 
     def add_runtime_loaded(self):
         data = {'record_type': self.RUNTIME_LOAD}
@@ -65,5 +69,12 @@ class CounterMgrLite:
         name = str(hashed.hexdigets())
         return name
 
-    def publish(self):
-        return
+    def create_thread(self):
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            executor.submit(self.send_msg)
+
+    def send_msg(self):
+        while True:
+            for m in self.msgs:
+                self.client.send(m)
+            time.sleep(300)
