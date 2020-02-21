@@ -78,6 +78,11 @@ class CounterMgrLite:
 
     def send_msg(self):
         while True:
+            for k in list(self.metrics):
+                pub_data = {'record_type': self.MODEL_RUN, 'model': k, 'run_count': self.metrics[k]}
+                self.msgs.append(json.dump(pub_data))
+            self.metrics.clear()
+
             while len(self.msgs) != 0:
                 m = self.msgs.pop()
                 self.client.send(m)
