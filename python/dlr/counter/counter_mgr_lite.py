@@ -54,8 +54,8 @@ class CounterMgrLite:
     @staticmethod
     def is_feature_enabled():
 
-        if CounterMgrLite.enable_feature is not None:
-            return CounterMgrLite.enable_feature
+        if CounterMgrLite._enable_feature is not None:
+            return CounterMgrLite._enable_feature
 
         feature_enb = False
         try:
@@ -71,7 +71,7 @@ class CounterMgrLite:
         except Exception as e:
             logging.exception("while in reading ccm config file", exc_info=False)
 
-        CounterMgrLite.enable_feature = feature_enb
+        CounterMgrLite._enable_feature = feature_enb
         return feature_enb
 
     def __init__(self):
