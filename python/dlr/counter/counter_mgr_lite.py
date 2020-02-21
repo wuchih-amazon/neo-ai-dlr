@@ -6,7 +6,7 @@ import atexit
 
 from concurrent.futures import ThreadPoolExecutor
 from .config import CALL_HOME_USR_NOTIFICATION
-import threading
+from threading import Thread, Event
 
 
 def call_home_lite(func):
@@ -53,7 +53,9 @@ class CounterMgrLite:
         self.client = resturlutils.RestUrlUtils()
         self.metrics = {}
         self.is_process = False
-        self.timer = None
+
+        self.stop_evt = None
+        self.worker = None
 
         self.create_thread()
 
@@ -82,13 +84,13 @@ class CounterMgrLite:
 
     def create_thread(self):
         self.is_process = True
-        self.timer = threading.Timer(5, self.worker)
-        self.timer.start()
+
+        self.stop_evt = Event()
+        self.worker = Worker(self.send_msg, self.stop_evt)
+        self.worker.start()
 
     def worker(self):
         self.send_msg()
-        self.timer = threading.Timer(5, self.worker)
-        self.timer.start()
 
     def send_msg(self):
         for k in list(self.metrics):
@@ -104,6 +106,19 @@ class CounterMgrLite:
     def clean_up(self):
         print("clean up initiated")
         # self.executor.shutdown()
-        self.timer.cancel()
+
+        self.stop_evt.set()
         self.send_msg()
         print("clean up done")
+
+
+class Worker(Thread):
+
+    def __init__(self, fn, event: Event):
+        self.fn = fn
+        self.stop_evt = event
+
+    def run(self):
+        while not self.stop_evt.wait(5):
+            print("execute thread")
+            self.fn()
