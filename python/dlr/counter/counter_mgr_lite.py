@@ -52,7 +52,7 @@ class CounterMgrLite:
         return CounterMgrLite._instance
 
     @staticmethod
-    def is_feature_enabled(self):
+    def is_feature_enabled():
 
         if CounterMgrLite.enable_feature is not None:
             return CounterMgrLite.enable_feature
