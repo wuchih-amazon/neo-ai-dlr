@@ -61,7 +61,7 @@ class CounterMgrLite:
 
     def add_model_run(self, model: str):
         model_name = self.get_model_hash(model)
-        if model in self.metrics:
+        if model_name in self.metrics:
             val = self.metrics[model_name]
             self.metrics[model_name] = val + 1
         else:
@@ -80,7 +80,7 @@ class CounterMgrLite:
         while True:
             for k in list(self.metrics):
                 pub_data = {'record_type': self.MODEL_RUN, 'model': k, 'run_count': self.metrics[k]}
-                self.msgs.append(json.dump(pub_data))
+                self.msgs.append(json.dumps(pub_data))
             self.metrics.clear()
 
             while len(self.msgs) != 0:
